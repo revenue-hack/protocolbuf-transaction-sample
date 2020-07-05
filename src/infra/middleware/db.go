@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"database/sql"
+	"log"
 	"strings"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -30,10 +31,12 @@ func isTransactionMethod(method string) bool {
 
 func DBInterceptor(conn *sql.DB) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		log.Println("start interceptor")
 		fullMethods := strings.Split(info.FullMethod, "/")
 		method := fullMethods[len(fullMethods)-1]
 		var tx *sql.Tx
 		if isTransactionMethod(method) {
+			log.Println("start transaction")
 			transaction, err := conn.BeginTx(ctx, nil)
 			if err != nil {
 				return nil, xerrors.New("transaction error")
@@ -49,6 +52,7 @@ func DBInterceptor(conn *sql.DB) grpc.UnaryServerInterceptor {
 			if tx != nil {
 				tx.Rollback()
 			}
+			log.Println("rollback")
 			return nil, xerrors.Errorf("fail to handle transaction: %w", err)
 		}
 
@@ -56,6 +60,7 @@ func DBInterceptor(conn *sql.DB) grpc.UnaryServerInterceptor {
 			if err := tx.Commit(); err != nil {
 				return nil, xerrors.Errorf("fail to handle transaction commit: %w", err)
 			}
+			log.Println("commited")
 		}
 
 		return resp, nil

@@ -5,6 +5,7 @@ import (
 
 	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"github.com/revenue-hack/protobuf-transaction-sample/src/controller"
 	"github.com/revenue-hack/protobuf-transaction-sample/src/infra/middleware"
 	"github.com/revenue-hack/protobuf-transaction-sample/src/infra/rdb"
 	"github.com/revenue-hack/protobuf-transaction-sample/src/proto"
@@ -17,7 +18,7 @@ func recoveryFunc(p interface{}) error {
 }
 
 func initService(s *grpc.Server) {
-	userControl := NewCreateUserController()
+	userControl := controller.NewCreateUserController()
 	proto.RegisterUserServiceServer(s, userControl)
 }
 

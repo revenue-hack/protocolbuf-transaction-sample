@@ -5,31 +5,29 @@ import (
 	"database/sql"
 	"fmt"
 	"sync"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/revenue-hack/protobuf-transaction-sample/src/config"
+	"github.com/revenue-hack/protobuf-transaction-sample/src/db"
 	_ "github.com/walf443/go-sql-tracer"
 	"golang.org/x/xerrors"
 )
 
 var (
 	once   sync.Once
-	driver = "postgres"
+	driver = "mysql"
 )
 
 func NewConnection() (*sql.DB, error) {
 	var conn *sql.DB
 	var err error
 	once.Do(func() {
-		connInfo := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s",
-			config.Env.DBHost, config.Env.DBPort, config.Env.DBName, config.Env.DBUser, config.Env.DBPassword)
-		if config.IsLocal() || config.IsTest() {
-			connInfo += " sslmode=disable"
-		}
+		protocol := fmt.Sprintf("tcp(%s:%s)", config.Env.DBHost, config.Env.DBPort)
+		connInfo := fmt.Sprintf("%s:%s@%s/%s?parseTime=true",
+			config.Env.DBUser, config.Env.DBPassword, protocol, config.Env.DBName)
 
 		if config.IsLocal() {
-			driver = "postgres:trace"
+			driver = "mysql:trace"
 		}
 		conn, err = sql.Open(driver, connInfo)
 		if err != nil {
@@ -45,28 +43,20 @@ func NewConnection() (*sql.DB, error) {
 		conn.SetMaxOpenConns(config.Env.RDBMaxConn)
 		// DB接続を待機させておくコネクション総数
 		conn.SetMaxIdleConns(config.Env.RDBMaxIdle)
-
-		loc, e := time.LoadLocation("Asia/Tokyo")
-		if e != nil {
-			err = e
-			return
-		}
-		boil.SetLocation(loc)
-		//boil.SetDB(conn)
 	})
 
 	return conn, err
 }
 
-func ExecFromCtx(ctx context.Context) (boil.ContextExecutor, error) {
+func ExecFromCtx(ctx context.Context) (db.RDBHandler, error) {
 	val := ctx.Value(config.DBKey)
 	if val == nil {
-		return nil, dserr.Internal(xerrors.New("fail to get connection from context"))
+		return nil, xerrors.New("fail to get connection from context")
 	}
 
-	conn, ok := val.(boil.ContextExecutor)
+	conn, ok := val.(db.RDBHandler)
 	if !ok {
-		return nil, dserr.Internal(xerrors.New("can't get context executor"))
+		return nil, xerrors.New("can't get context executor")
 	}
 	return conn, nil
 }

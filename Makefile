@@ -16,7 +16,9 @@ generate/go:
 generate/proto:
 	./gen.sh
 
+run:
+	cd src && env GO_ENV=local LOCAL_DB_NAME=sample LOCAL_DB_HOST=localhost LOCAL_DB_PORT=3346 LOCAL_DB_USER=root LOCAL_DB_PASS=root go run .
 
 test:
-	env GO_ENV=test TEST_PSQL_DBNAME=sample TEST_PSQL_HOST=localhost TEST_PSQL_PORT=5411 TEST_PSQL_USER=sample_user TEST_PSQL_PASS=sample2020 go test ./src/...
+	env GO_ENV=local LOCAL_DB_NAME=sample LOCAL_DB_HOST=localhost LOCAL_DB_PORT=3346 LOCAL_DB_USER=root LOCAL_DB_PASS=root go test -v ./src/...
 
