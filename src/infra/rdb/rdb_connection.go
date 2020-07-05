@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/revenue-hack/protobuf-transaction-sample/src/config"
 	_ "github.com/walf443/go-sql-tracer"
 	"golang.org/x/xerrors"

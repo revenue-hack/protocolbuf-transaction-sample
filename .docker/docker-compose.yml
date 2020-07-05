@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  mysql:
+    build:
+      context: ../
+      dockerfile: ./.docker/local/db.Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: protobuf_sample
+      MYSQL_DATABASE: sample
+      MYSQL_PASSWORD: sample2020
+      TZ: Asia/Tokyo
+    volumes:
+      - ./local/my.cnf:/etc/mysql/conf.d/my.cnf
+      - protobuf-sample-store:/var/lib/mysql
+    ports:
+      - "3346:3306"
+    container_name: protobuf-sample-db
+
+volumes:
+  protobuf-sample-store:
+    driver: local
+
