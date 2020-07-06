@@ -110,9 +110,122 @@ func (m *CreateUserResponse) GetName() string {
 	return ""
 }
 
+type CreateUserImageRequest struct {
+	// Types that are valid to be assigned to Image:
+	//	*CreateUserImageRequest_UserId
+	//	*CreateUserImageRequest_ImageBytes
+	Image                isCreateUserImageRequest_Image `protobuf_oneof:"image"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
+}
+
+func (m *CreateUserImageRequest) Reset()         { *m = CreateUserImageRequest{} }
+func (m *CreateUserImageRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateUserImageRequest) ProtoMessage()    {}
+func (*CreateUserImageRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_116e343673f7ffaf, []int{2}
+}
+
+func (m *CreateUserImageRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateUserImageRequest.Unmarshal(m, b)
+}
+func (m *CreateUserImageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateUserImageRequest.Marshal(b, m, deterministic)
+}
+func (m *CreateUserImageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateUserImageRequest.Merge(m, src)
+}
+func (m *CreateUserImageRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateUserImageRequest.Size(m)
+}
+func (m *CreateUserImageRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateUserImageRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateUserImageRequest proto.InternalMessageInfo
+
+type isCreateUserImageRequest_Image interface {
+	isCreateUserImageRequest_Image()
+}
+
+type CreateUserImageRequest_UserId struct {
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3,oneof"`
+}
+
+type CreateUserImageRequest_ImageBytes struct {
+	ImageBytes []byte `protobuf:"bytes,2,opt,name=image_bytes,json=imageBytes,proto3,oneof"`
+}
+
+func (*CreateUserImageRequest_UserId) isCreateUserImageRequest_Image() {}
+
+func (*CreateUserImageRequest_ImageBytes) isCreateUserImageRequest_Image() {}
+
+func (m *CreateUserImageRequest) GetImage() isCreateUserImageRequest_Image {
+	if m != nil {
+		return m.Image
+	}
+	return nil
+}
+
+func (m *CreateUserImageRequest) GetUserId() string {
+	if x, ok := m.GetImage().(*CreateUserImageRequest_UserId); ok {
+		return x.UserId
+	}
+	return ""
+}
+
+func (m *CreateUserImageRequest) GetImageBytes() []byte {
+	if x, ok := m.GetImage().(*CreateUserImageRequest_ImageBytes); ok {
+		return x.ImageBytes
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateUserImageRequest) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateUserImageRequest_UserId)(nil),
+		(*CreateUserImageRequest_ImageBytes)(nil),
+	}
+}
+
+type CreateUserImageResponse struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateUserImageResponse) Reset()         { *m = CreateUserImageResponse{} }
+func (m *CreateUserImageResponse) String() string { return proto.CompactTextString(m) }
+func (*CreateUserImageResponse) ProtoMessage()    {}
+func (*CreateUserImageResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_116e343673f7ffaf, []int{3}
+}
+
+func (m *CreateUserImageResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateUserImageResponse.Unmarshal(m, b)
+}
+func (m *CreateUserImageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateUserImageResponse.Marshal(b, m, deterministic)
+}
+func (m *CreateUserImageResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateUserImageResponse.Merge(m, src)
+}
+func (m *CreateUserImageResponse) XXX_Size() int {
+	return xxx_messageInfo_CreateUserImageResponse.Size(m)
+}
+func (m *CreateUserImageResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateUserImageResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateUserImageResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*CreateUserRequest)(nil), "user.CreateUserRequest")
 	proto.RegisterType((*CreateUserResponse)(nil), "user.CreateUserResponse")
+	proto.RegisterType((*CreateUserImageRequest)(nil), "user.CreateUserImageRequest")
+	proto.RegisterType((*CreateUserImageResponse)(nil), "user.CreateUserImageResponse")
 }
 
 func init() {
@@ -120,17 +233,22 @@ func init() {
 }
 
 var fileDescriptor_116e343673f7ffaf = []byte{
-	// 149 bytes of a gzipped FileDescriptorProto
+	// 238 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2a, 0x2d, 0x4e, 0x2d,
 	0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x01, 0xb1, 0x95, 0xd4, 0xb9, 0x04, 0x9d, 0x8b,
 	0x52, 0x13, 0x4b, 0x52, 0x43, 0x8b, 0x53, 0x8b, 0x82, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84,
 	0x84, 0xb8, 0x58, 0xf2, 0x12, 0x73, 0x53, 0x25, 0x18, 0x15, 0x18, 0x35, 0x38, 0x83, 0xc0, 0x6c,
 	0x25, 0x0b, 0x2e, 0x21, 0x64, 0x85, 0xc5, 0x05, 0xf9, 0x79, 0xc5, 0xa9, 0x42, 0x7c, 0x5c, 0x4c,
-	0x99, 0x29, 0x50, 0x75, 0x4c, 0x99, 0x29, 0x70, 0x9d, 0x4c, 0x08, 0x9d, 0x46, 0x7e, 0x5c, 0xdc,
-	0x20, 0x3d, 0xc1, 0xa9, 0x45, 0x65, 0x99, 0xc9, 0xa9, 0x42, 0xf6, 0x5c, 0x5c, 0x08, 0x83, 0x84,
-	0xc4, 0xf5, 0xc0, 0x4e, 0xc2, 0x70, 0x83, 0x94, 0x04, 0xa6, 0x04, 0xc4, 0x4e, 0x27, 0xf6, 0x28,
-	0x56, 0xb0, 0x0f, 0x92, 0xd8, 0xc0, 0x94, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xc7, 0x22, 0x93,
-	0x46, 0xd6, 0x00, 0x00, 0x00,
+	0x99, 0x29, 0x50, 0x75, 0x4c, 0x99, 0x29, 0x70, 0x9d, 0x4c, 0x48, 0x3a, 0xe3, 0xb9, 0xc4, 0x10,
+	0x3a, 0x3d, 0x73, 0x13, 0xd3, 0x53, 0x61, 0xf6, 0x48, 0x72, 0xb1, 0x83, 0x1c, 0x11, 0x0f, 0x33,
+	0xc2, 0x83, 0x21, 0x88, 0x0d, 0x24, 0xe0, 0x99, 0x22, 0xa4, 0xc8, 0xc5, 0x9d, 0x09, 0x52, 0x1a,
+	0x9f, 0x54, 0x59, 0x92, 0x5a, 0x0c, 0x36, 0x8f, 0xc7, 0x83, 0x21, 0x88, 0x0b, 0x2c, 0xe8, 0x04,
+	0x12, 0x73, 0x62, 0xe7, 0x62, 0x05, 0xf3, 0x94, 0x24, 0xb9, 0xc4, 0x31, 0x2c, 0x80, 0xb8, 0xcf,
+	0x68, 0x01, 0x23, 0x17, 0x37, 0x48, 0x34, 0x38, 0xb5, 0xa8, 0x2c, 0x33, 0x39, 0x55, 0xc8, 0x9e,
+	0x8b, 0x0b, 0xa1, 0x54, 0x48, 0x5c, 0x0f, 0x1c, 0x1e, 0x18, 0x01, 0x20, 0x25, 0x81, 0x29, 0x01,
+	0xf5, 0x70, 0x00, 0x17, 0x3f, 0x9a, 0x5d, 0x42, 0x32, 0xe8, 0x8a, 0x91, 0xfd, 0x28, 0x25, 0x8b,
+	0x43, 0x16, 0x62, 0x9e, 0x06, 0xa3, 0x13, 0x7b, 0x14, 0x2b, 0x38, 0x42, 0x92, 0xd8, 0xc0, 0x94,
+	0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x8d, 0x26, 0x44, 0x84, 0xa5, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -146,6 +264,7 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	CreateUserImage(ctx context.Context, opts ...grpc.CallOption) (UserService_CreateUserImageClient, error)
 }
 
 type userServiceClient struct {
@@ -165,9 +284,44 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserReques
 	return out, nil
 }
 
+func (c *userServiceClient) CreateUserImage(ctx context.Context, opts ...grpc.CallOption) (UserService_CreateUserImageClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_UserService_serviceDesc.Streams[0], "/user.UserService/CreateUserImage", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &userServiceCreateUserImageClient{stream}
+	return x, nil
+}
+
+type UserService_CreateUserImageClient interface {
+	Send(*CreateUserImageRequest) error
+	CloseAndRecv() (*CreateUserImageResponse, error)
+	grpc.ClientStream
+}
+
+type userServiceCreateUserImageClient struct {
+	grpc.ClientStream
+}
+
+func (x *userServiceCreateUserImageClient) Send(m *CreateUserImageRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *userServiceCreateUserImageClient) CloseAndRecv() (*CreateUserImageResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(CreateUserImageResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 type UserServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	CreateUserImage(UserService_CreateUserImageServer) error
 }
 
 // UnimplementedUserServiceServer can be embedded to have forward compatible implementations.
@@ -176,6 +330,9 @@ type UnimplementedUserServiceServer struct {
 
 func (*UnimplementedUserServiceServer) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (*UnimplementedUserServiceServer) CreateUserImage(srv UserService_CreateUserImageServer) error {
+	return status.Errorf(codes.Unimplemented, "method CreateUserImage not implemented")
 }
 
 func RegisterUserServiceServer(s *grpc.Server, srv UserServiceServer) {
@@ -200,6 +357,32 @@ func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_CreateUserImage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(UserServiceServer).CreateUserImage(&userServiceCreateUserImageServer{stream})
+}
+
+type UserService_CreateUserImageServer interface {
+	SendAndClose(*CreateUserImageResponse) error
+	Recv() (*CreateUserImageRequest, error)
+	grpc.ServerStream
+}
+
+type userServiceCreateUserImageServer struct {
+	grpc.ServerStream
+}
+
+func (x *userServiceCreateUserImageServer) SendAndClose(m *CreateUserImageResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *userServiceCreateUserImageServer) Recv() (*CreateUserImageRequest, error) {
+	m := new(CreateUserImageRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 var _UserService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "user.UserService",
 	HandlerType: (*UserServiceServer)(nil),
@@ -209,6 +392,12 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_CreateUser_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "CreateUserImage",
+			Handler:       _UserService_CreateUserImage_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "user.proto",
 }

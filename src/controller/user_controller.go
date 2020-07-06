@@ -1,7 +1,11 @@
 package controller
 
 import (
+	"bytes"
 	"context"
+	"fmt"
+	"io"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/revenue-hack/protobuf-transaction-sample/src/infra/rdb"
@@ -33,4 +37,39 @@ func (s *CreateUserController) CreateUser(ctx context.Context, in *proto.CreateU
 	}
 
 	return &proto.CreateUserResponse{Id: id, Name: in.Name}, nil
+}
+
+func (s *CreateUserController) CreateUserImage(stream proto.UserService_CreateUserImageServer) error {
+	var buf bytes.Buffer
+	var userID string
+	for {
+		in, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return status.Error(codes.Internal, xerrors.Errorf("fail to get stream request: %w", err).Error())
+		}
+
+		switch input := in.Image.(type) {
+		case *proto.CreateUserImageRequest_ImageBytes:
+			if _, err := buf.Write(input.ImageBytes); err != nil {
+				return xerrors.Errorf("fail to read image bytes: %w", err)
+			}
+		case *proto.CreateUserImageRequest_UserId:
+			userID = input.UserId
+		default:
+			break
+		}
+	}
+
+	file, err := os.Create(fmt.Sprintf("./%s.jpg", userID))
+	if err != nil {
+		return xerrors.Errorf("fail to create: %w", err)
+	}
+	if _, err := io.Copy(file, &buf); err != nil {
+		return xerrors.Errorf("fail to copy: %w", err)
+	}
+
+	return nil
 }

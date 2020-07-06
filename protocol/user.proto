@@ -6,6 +6,7 @@ option go_package = "proto";
 
 service UserService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc CreateUserImage(stream CreateUserImageRequest) returns (CreateUserImageResponse);
 }
 
 message CreateUserRequest {
@@ -17,13 +18,11 @@ message CreateUserResponse {
   string name = 2;
 }
 
-/*
-message CreateUserRequest {
-  oneof image {
+message CreateUserImageRequest {
+  oneof Image {
     string user_id = 1;
     bytes image_bytes = 2;
   }
 }
 
 message CreateUserImageResponse {}
-*/

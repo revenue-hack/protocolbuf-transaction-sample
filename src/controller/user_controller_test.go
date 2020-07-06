@@ -2,6 +2,7 @@ package controller_test
 
 import (
 	"context"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -69,5 +70,54 @@ func Test_CreateUser(t *testing.T) {
 	}
 	if resp.Name != expectedName {
 		t.Errorf("name is invalid. result is %s, expected is %s", resp.Name, expectedName)
+	}
+}
+
+func Test_CreateUserImage(t *testing.T) {
+	ctx := context.Background()
+	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
+
+	userClient := proto.NewUserServiceClient(conn)
+	imageClient, err := userClient.CreateUserImage(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	file, err := os.Open("../testdata/sample.jpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+
+	buf := make([]byte, 1024)
+	for {
+		n, err := file.Read(buf)
+		if n == 0 {
+			break
+		}
+		if err != nil {
+			log.Printf("発生ー: %v", err)
+			t.Fatal(err)
+		}
+		imageReq := &proto.CreateUserImageRequest_ImageBytes{ImageBytes: buf}
+		err = imageClient.Send(&proto.CreateUserImageRequest{Image: imageReq})
+		log.Printf("っっｚ: %v\n", err)
+		if err != nil {
+			t.Errorf("fail to send image bytes: %v", err)
+			return
+		}
+	}
+
+	userID := "560dd795-bc60-4046-83c6-e9b4a06a8ef2"
+	userIDReq := &proto.CreateUserImageRequest_UserId{UserId: userID}
+	if err := imageClient.Send(&proto.CreateUserImageRequest{Image: userIDReq}); err != nil {
+		t.Errorf("fail to send user id: %v", err)
+	}
+
+	if _, err := imageClient.CloseAndRecv(); err != nil && err != io.EOF {
+		t.Fatal(err)
 	}
 }
