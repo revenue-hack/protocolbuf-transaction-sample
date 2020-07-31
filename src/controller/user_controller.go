@@ -32,6 +32,9 @@ func (s *CreateUserController) CreateUser(ctx context.Context, in *proto.CreateU
 		return nil, status.Error(codes.Internal, xerrors.Errorf("fail to prepare sql: %w", err).Error())
 	}
 	id := uuid.New().String()
+	if in.Name == "" {
+		return nil, status.Error(codes.InvalidArgument, xerrors.Errorf("id must be not empty: %s", in.Name).Error())
+	}
 	if _, err := ins.Exec(id, in.Name); err != nil {
 		return nil, status.Error(codes.Internal, xerrors.Errorf("fail to execute: %w", err).Error())
 	}
@@ -57,7 +60,9 @@ func (s *CreateUserController) CreateUserImage(stream proto.UserService_CreateUs
 				return xerrors.Errorf("fail to read image bytes: %w", err)
 			}
 		case *proto.CreateUserImageRequest_UserId:
-			userID = input.UserId
+			if userID == "" {
+				userID = input.UserId
+			}
 		default:
 			break
 		}

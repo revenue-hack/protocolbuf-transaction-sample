@@ -1,6 +1,6 @@
 local:
     dialect: mysql
-    datasource: dbname=sample user=root password=root sslmode=disable port=3346
+    datasource: dbname=sample user=protobuf_sample password=sample2020 sslmode=disable port=3346
     datasource: root:root@tcp(localhost:3346)/sample?parseTime=true&collation=utf8mb4_general_ci
     dir: migrations
     table: migrations

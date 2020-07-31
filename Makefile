@@ -17,8 +17,8 @@ generate/proto:
 	./gen.sh
 
 run:
-	cd src && env GO_ENV=local LOCAL_DB_NAME=sample LOCAL_DB_HOST=localhost LOCAL_DB_PORT=3346 LOCAL_DB_USER=root LOCAL_DB_PASS=root go run .
+	cd src && env GO_ENV=local LOCAL_DB_NAME=sample LOCAL_DB_HOST=localhost LOCAL_DB_PORT=3346 LOCAL_DB_USER=protobuf_sample LOCAL_DB_PASS=sample2020 go run .
 
 test:
-	env GO_ENV=local LOCAL_DB_NAME=sample LOCAL_DB_HOST=localhost LOCAL_DB_PORT=3346 LOCAL_DB_USER=root LOCAL_DB_PASS=root go test -v ./src/...
+	env GO_ENV=local LOCAL_DB_NAME=sample LOCAL_DB_HOST=localhost LOCAL_DB_PORT=3346 LOCAL_DB_USER=protobuf_sample LOCAL_DB_PASS=sample2020 go test -v ./src/...
 

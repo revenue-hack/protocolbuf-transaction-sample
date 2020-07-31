@@ -66,10 +66,27 @@ func Test_CreateUser(t *testing.T) {
 	expectedName := "testname"
 	resp, err := userClient.CreateUser(ctx, &proto.CreateUserRequest{Name: expectedName})
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
+		return
 	}
 	if resp.Name != expectedName {
 		t.Errorf("name is invalid. result is %s, expected is %s", resp.Name, expectedName)
+	}
+}
+
+func Test_CreateUserOfRollback(t *testing.T) {
+	ctx := context.Background()
+	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	defer conn.Close()
+
+	userClient := proto.NewUserServiceClient(conn)
+	if _, err := userClient.CreateUser(ctx, &proto.CreateUserRequest{}); err == nil {
+		t.Error(err)
+		return
 	}
 }
 
@@ -99,12 +116,10 @@ func Test_CreateUserImage(t *testing.T) {
 			break
 		}
 		if err != nil {
-			log.Printf("発生ー: %v", err)
 			t.Fatal(err)
 		}
 		imageReq := &proto.CreateUserImageRequest_ImageBytes{ImageBytes: buf}
 		err = imageClient.Send(&proto.CreateUserImageRequest{Image: imageReq})
-		log.Printf("っっｚ: %v\n", err)
 		if err != nil {
 			t.Errorf("fail to send image bytes: %v", err)
 			return
